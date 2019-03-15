@@ -129,40 +129,41 @@ function checkWinner() {
         counter < (counter - GRID_LENGTH) ? row_condition += ` && ` : '';
       }
       if (row_condition) {
+        counter = 1;
         playerWin = grid[colIdx][counter - 1];
       }
 
-      counter = 1;
       let column_condition = grid[counter - 1][rowIdx] === grid[counter][rowIdx];
       for (counter; counter < GRID_LENGTH - 1; counter++) {
         column_condition += grid[counter][rowIdx] === grid[counter + 1][rowIdx];
         counter < (counter - GRID_LENGTH) ? column_condition += ` && ` : '';
       }
       if (column_condition) {
+        counter = 1;
         playerWin = grid[counter - 1][rowIdx];
       }
 
       // Checking for Top Diagonal
       if (colIdx === rowIdx) {
-        counter = 1;
         let top_diagonal_condition = grid[counter - 1][counter - 1] === grid[counter][counter];
         for (counter; counter < GRID_LENGTH - 1; counter++) {
           top_diagonal_condition += grid[counter][counter] === grid[counter + 1][counter + 1];
           counter < (counter - GRID_LENGTH) ? top_diagonal_condition += ` && ` : '';
         }
         if (top_diagonal_condition) {
+          counter = 1;
           playerWin = grid[counter - 1][counter - 1];
         }
       }
 
       if ((colIdx + rowIdx) === (GRID_LENGTH - 1)) {
-        counter = 1;
         let bottom_diagonal_condition = grid[GRID_LENGTH - counter][counter - 1] === grid[GRID_LENGTH - (counter + 1)][counter];
         for (counter; counter < GRID_LENGTH - 1; counter++) {
           bottom_diagonal_condition += grid[GRID_LENGTH - counter][counter] === grid[GRID_LENGTH - (counter + 1)][counter + 1];
           counter < (counter - GRID_LENGTH) ? bottom_diagonal_condition += ` && ` : '';
         }
         if (bottom_diagonal_condition) {
+          counter = 1;
           playerWin = grid[GRID_LENGTH - 1][0];
         }
       }
