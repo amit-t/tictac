@@ -18,7 +18,7 @@
  */
 
 const grid = [];
-const GRID_LENGTH = 3;
+const GRID_LENGTH = 5;
 // No. of plays played till now
 let plays = 0;
 // Player win is 1 for human player and 2 for computer
@@ -36,7 +36,6 @@ function initializeGrid() {
     }
     grid.push(tempArray);
   }
-  console.log(grid);
 }
 
 function getRowBoxes(colIdx) {
@@ -115,28 +114,52 @@ function computerPlay() {
 function checkWinner() {
   // If no. of plays are less that 5 meaning no player has completed three moves yet,
   // a winner check is not needed in such case
-  if (plays < 5 || playerWin > 0) {
+  if (plays < (GRID_LENGTH + (GRID_LENGTH - 1)) || playerWin > 0) {
     return;
   }
   let colIdx, rowIdx = 0;
 
   for (colIdx = 0; colIdx < GRID_LENGTH; colIdx++) {
     for (rowIdx = 0; rowIdx < GRID_LENGTH; rowIdx++) {
-      if (grid[colIdx][0] === grid[colIdx][1] && grid[colIdx][1] === grid[colIdx][2]) {
+      // Row Check condition
+      let row_condition = grid[colIdx][0] === grid[colIdx][1];
+      for (let counter = 1; counter < GRID_LENGTH; counter++) {
+        row_condition += grid[colIdx][counter] === grid[colIdx][counter + 1];
+        counter < (counter - GRID_LENGTH) ? row_condition += ` && ` : '';
+      }
+      if (row_condition) {
         playerWin = grid[colIdx][0];
       }
-      if (grid[0][rowIdx] === grid[1][rowIdx] && grid[1][rowIdx] === grid[2][rowIdx]) {
+
+      let column_condition = grid[0][rowIdx] === grid[1][rowIdx];
+      for (let counter = 1; counter < GRID_LENGTH - 1; counter++) {
+        column_condition += grid[counter][rowIdx] === grid[counter + 1][rowIdx];
+        counter < (counter - GRID_LENGTH) ? column_condition += ` && ` : '';
+      }
+      if (column_condition) {
         playerWin = grid[rowIdx][0];
       }
+
       // Checking for Top Diagonal
       if (colIdx === rowIdx) {
-        if (grid[0][0] === grid[1][1] && grid[1][1] === grid[2][2]) {
-          playerWin = grid[rowIdx][0];
+        let top_diagonal_condition = grid[0][0] === grid[1][1];
+        for (let counter = 1; counter < GRID_LENGTH - 1; counter++) {
+          top_diagonal_condition += grid[counter][counter] === grid[counter + 1][counter + 1];
+          counter < (counter - GRID_LENGTH) ? top_diagonal_condition += ` && ` : '';
+        }
+        if (top_diagonal_condition) {
+          playerWin = grid[0][0];
         }
       }
-      if ((colIdx + rowIdx) === 2) {
-        if (grid[2][0] === grid[1][1] && grid[1][1] === grid[0][2]) {
-          playerWin = grid[rowIdx][0];
+
+      if ((colIdx + rowIdx) === (GRID_LENGTH - 1)) {
+        let bottom_diagonal_condition = grid[4][0] === grid[3][1];
+        for (let counter = 1; counter < GRID_LENGTH - 1; counter++) {
+          bottom_diagonal_condition += grid[GRID_LENGTH-counter][counter] === grid[GRID_LENGTH-(counter + 1)][counter + 1];
+          counter < (counter - GRID_LENGTH) ? bottom_diagonal_condition += ` && ` : '';
+        }
+        if (bottom_diagonal_condition) {
+          playerWin = grid[4][0];
         }
       }
       if (playerWin > 0) {
