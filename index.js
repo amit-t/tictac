@@ -121,45 +121,49 @@ function checkWinner() {
 
   for (colIdx = 0; colIdx < GRID_LENGTH; colIdx++) {
     for (rowIdx = 0; rowIdx < GRID_LENGTH; rowIdx++) {
+      let counter = 1;
       // Row Check condition
-      let row_condition = grid[colIdx][0] === grid[colIdx][1];
-      for (let counter = 1; counter < GRID_LENGTH; counter++) {
+      let row_condition = grid[colIdx][counter - 1] === grid[colIdx][counter];
+      for (counter; counter < GRID_LENGTH; counter++) {
         row_condition += grid[colIdx][counter] === grid[colIdx][counter + 1];
         counter < (counter - GRID_LENGTH) ? row_condition += ` && ` : '';
       }
       if (row_condition) {
-        playerWin = grid[colIdx][0];
+        playerWin = grid[colIdx][counter - 1];
       }
 
-      let column_condition = grid[0][rowIdx] === grid[1][rowIdx];
-      for (let counter = 1; counter < GRID_LENGTH - 1; counter++) {
+      counter = 1;
+      let column_condition = grid[counter - 1][rowIdx] === grid[counter][rowIdx];
+      for (counter; counter < GRID_LENGTH - 1; counter++) {
         column_condition += grid[counter][rowIdx] === grid[counter + 1][rowIdx];
         counter < (counter - GRID_LENGTH) ? column_condition += ` && ` : '';
       }
       if (column_condition) {
-        playerWin = grid[rowIdx][0];
+        playerWin = grid[counter - 1][rowIdx];
       }
 
       // Checking for Top Diagonal
       if (colIdx === rowIdx) {
-        let top_diagonal_condition = grid[0][0] === grid[1][1];
-        for (let counter = 1; counter < GRID_LENGTH - 1; counter++) {
+        counter = 1;
+        let top_diagonal_condition = grid[counter - 1][counter - 1] === grid[counter][counter];
+        for (counter; counter < GRID_LENGTH - 1; counter++) {
           top_diagonal_condition += grid[counter][counter] === grid[counter + 1][counter + 1];
           counter < (counter - GRID_LENGTH) ? top_diagonal_condition += ` && ` : '';
         }
         if (top_diagonal_condition) {
-          playerWin = grid[0][0];
+          playerWin = grid[counter - 1][counter - 1];
         }
       }
 
       if ((colIdx + rowIdx) === (GRID_LENGTH - 1)) {
-        let bottom_diagonal_condition = grid[4][0] === grid[3][1];
-        for (let counter = 1; counter < GRID_LENGTH - 1; counter++) {
-          bottom_diagonal_condition += grid[GRID_LENGTH-counter][counter] === grid[GRID_LENGTH-(counter + 1)][counter + 1];
+        counter = 1;
+        let bottom_diagonal_condition = grid[GRID_LENGTH - counter][counter - 1] === grid[GRID_LENGTH - (counter + 1)][counter];
+        for (counter; counter < GRID_LENGTH - 1; counter++) {
+          bottom_diagonal_condition += grid[GRID_LENGTH - counter][counter] === grid[GRID_LENGTH - (counter + 1)][counter + 1];
           counter < (counter - GRID_LENGTH) ? bottom_diagonal_condition += ` && ` : '';
         }
         if (bottom_diagonal_condition) {
-          playerWin = grid[4][0];
+          playerWin = grid[GRID_LENGTH - 1][0];
         }
       }
       if (playerWin > 0) {
