@@ -226,7 +226,7 @@ function onComputerPlay() {
     let scenarios = win_scenarios[state_index];
     for (let i = 0; i < scenarios.length; i++) {
       let box_index = scenarios[i];
-      let {colIdx, rowIdx} = box_indices[box_index];
+      let [colIdx, rowIdx] = box_indices[box_index];
       if (grid[colIdx][rowIdx] === 0) {
         grid[colIdx][rowIdx] = computerValue;
         // Increment no. of plays
