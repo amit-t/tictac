@@ -151,11 +151,6 @@ function onPlayerPlay() {
       // Init Computer play
       onComputerPlay();
     }
-    // Check if there is a winner
-    // checkWinner();
-    // Init Computer play
-    // computerPlay();
-
   }
 }
 
@@ -395,100 +390,6 @@ function evaluateStates(colIdx, rowIdx, play) {
 
 function getIndex(colIdx, rowIdx) {
   return Math.floor((colIdx * GRID_LENGTH) + rowIdx);
-}
-
-function computerPlay() {
-  let colIdx = Math.floor(Math.random() * GRID_LENGTH);
-  let rowIdx = Math.floor(Math.random() * GRID_LENGTH);
-  // Search for an empty grid
-  if (grid[colIdx][rowIdx] === 0) {
-    grid[colIdx][rowIdx] = computerValue;
-    // Increment no. of plays
-    plays++;
-    checkWinner();
-    renderMainGrid();
-    addClickHandlers();
-    return;
-  }
-  if (plays < 9) {
-    computerPlay();
-  }
-}
-
-function checkWinner() {
-  // If no. of plays are less that 5 meaning no player has completed three moves yet,
-  // a winner check is not needed in such case
-  if (plays < (GRID_LENGTH + (GRID_LENGTH - 1)) || playerWin > 0) {
-    return;
-  }
-  let colIdx, rowIdx = 0;
-
-  for (colIdx = 0; colIdx < GRID_LENGTH; colIdx++) {
-    for (rowIdx = 0; rowIdx < GRID_LENGTH; rowIdx++) {
-      let counter = 1;
-      // Row Check condition
-      let row_condition = grid[colIdx][counter - 1] === grid[colIdx][counter];
-      for (counter; counter < GRID_LENGTH; counter++) {
-        row_condition += grid[colIdx][counter] === grid[colIdx][counter + 1];
-        counter < (counter - GRID_LENGTH) ? row_condition += ` && ` : '';
-      }
-      if (row_condition) {
-        counter = 1;
-        playerWin = grid[colIdx][counter - 1];
-      }
-
-      let column_condition = grid[counter - 1][rowIdx] === grid[counter][rowIdx];
-      for (counter; counter < GRID_LENGTH - 1; counter++) {
-        column_condition += grid[counter][rowIdx] === grid[counter + 1][rowIdx];
-        counter < (counter - GRID_LENGTH) ? column_condition += ` && ` : '';
-      }
-      if (column_condition) {
-        counter = 1;
-        playerWin = grid[counter - 1][rowIdx];
-      }
-
-      // Checking for Top Diagonal
-      if (colIdx === rowIdx) {
-        let top_diagonal_condition = grid[counter - 1][counter - 1] === grid[counter][counter];
-        for (counter; counter < GRID_LENGTH - 1; counter++) {
-          top_diagonal_condition += grid[counter][counter] === grid[counter + 1][counter + 1];
-          counter < (counter - GRID_LENGTH) ? top_diagonal_condition += ` && ` : '';
-        }
-        if (top_diagonal_condition) {
-          counter = 1;
-          playerWin = grid[counter - 1][counter - 1];
-        }
-      }
-
-      if ((colIdx + rowIdx) === (GRID_LENGTH - 1)) {
-        let bottom_diagonal_condition = grid[GRID_LENGTH - counter][counter - 1] === grid[GRID_LENGTH - (counter + 1)][counter];
-        for (counter; counter < GRID_LENGTH - 1; counter++) {
-          bottom_diagonal_condition += grid[GRID_LENGTH - counter][counter] === grid[GRID_LENGTH - (counter + 1)][counter + 1];
-          counter < (counter - GRID_LENGTH) ? bottom_diagonal_condition += ` && ` : '';
-        }
-        if (bottom_diagonal_condition) {
-          counter = 1;
-          playerWin = grid[GRID_LENGTH - 1][0];
-        }
-      }
-      if (playerWin > 0) {
-        // Declare Winner
-        const result_message = playerWin === 1 ? `You have won! Good Job!` : `Computer has won! You lost!`
-        const result = document.getElementById("result-message");
-        result.innerHTML = result_message;
-        result.style.display = 'flex';
-        // Stop further runs of loop as winner has been identified
-        return;
-      }
-    }
-  }
-  if (plays === 9 && playerWin === 0) {
-    // Declare Draw
-    const result_message = `Aww! It's a tie!`;
-    const result = document.getElementById("result-message");
-    result.innerHTML = result_message;
-    result.style.display = 'flex';
-  }
 }
 
 function declareWinner(playerWin) {
